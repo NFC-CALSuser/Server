@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import json
 import os
 
@@ -6,7 +6,8 @@ app = Flask(__name__)
 
 def load_data():
     try:
-        with open('db.json', 'r', encoding='utf-8') as file:
+        db_path = os.path.join(os.path.dirname(__file__), 'db.json')
+        with open(db_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except FileNotFoundError:
         # Create default structure if file doesn't exist
@@ -126,6 +127,24 @@ def get_course(course_code):
     if course:
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
+
+# New route to display db.json
+@app.route('/db.json')
+def get_db():
+    try:
+        data = load_data()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# New route to display raw db.json
+@app.route('/raw/db.json')
+def get_raw_db():
+    try:
+        db_path = os.path.join(os.path.dirname(__file__), 'db.json')
+        return send_file(db_path, mimetype='application/json')
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     # Use environment variable for port (required for Heroku)
