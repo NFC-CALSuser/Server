@@ -1,0 +1,23 @@
+{
+    "students": [{
+        "id": "sample",
+        "name": "Sample Student",
+        "email": "sample@example.com"
+    }],
+    "instructors": [{
+        "id": "sample",
+        "name": "Sample Instructor",
+        "email": "instructor@example.com"
+    }],
+    "classes": [{
+        "id": "sample",
+        "courseId": "sample",
+        "instructorId": "sample",
+        "semester": "Fall 2023"
+    }],
+    "courses": [{
+        "id": "sample",
+        "name": "Sample Course",
+        "description": "Sample course description"
+    }]
+}

@@ -1,106 +1,134 @@
 from flask import Flask, request, jsonify
 import json
+import os
 
 app = Flask(__name__)
 
-# Load data from data.json
-with open('data.json', 'r', encoding='utf-8') as file:
-    data = json.load(file)
+def load_data():
+    try:
+        with open('db.json', 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        # Create default structure if file doesn't exist
+        default_data = {
+            "students": [],
+            "instructors": [],
+            "classes": [],
+            "courses": []
+        }
+        save_data(default_data)
+        return default_data
+
+def save_data(data):
+    with open('db.json', 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)
+
+# Initialize data
+data = load_data()
 
 # Default Route
 @app.route('/')
 def home():
     return "NFC-CALS Server is Running!"
 
-# GET Endpoint: Fetch all students
 @app.route('/students', methods=['GET'])
 def get_students():
+    data = load_data()  # Reload data for each request
     return jsonify(data['students'])
 
-# POST Endpoint: Add a new student
 @app.route('/students', methods=['POST'])
 def add_student():
-    new_student = request.json
-    data['students'].append(new_student)
-    with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-    return jsonify({"message": "Student added successfully!"}), 201
+    try:
+        data = load_data()
+        new_student = request.json
+        data['students'].append(new_student)
+        save_data(data)
+        return jsonify({"message": "Student added successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# GET Endpoint: Fetch specific student by ID
 @app.route('/students/<int:student_id>', methods=['GET'])
 def get_student(student_id):
+    data = load_data()
     student = next((s for s in data['students'] if s['id'] == student_id), None)
     if student:
         return jsonify(student)
     return jsonify({"error": "Student not found"}), 404
 
-# GET Endpoint: Fetch all instructors
 @app.route('/instructors', methods=['GET'])
 def get_instructors():
+    data = load_data()
     return jsonify(data['instructors'])
 
-# POST Endpoint: Add a new instructor
 @app.route('/instructors', methods=['POST'])
 def add_instructor():
-    new_instructor = request.json
-    data['instructors'].append(new_instructor)
-    with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-    return jsonify({"message": "Instructor added successfully!"}), 201
+    try:
+        data = load_data()
+        new_instructor = request.json
+        data['instructors'].append(new_instructor)
+        save_data(data)
+        return jsonify({"message": "Instructor added successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# GET Endpoint: Fetch specific instructor by employee ID
 @app.route('/instructors/<int:employee_id>', methods=['GET'])
 def get_instructor(employee_id):
+    data = load_data()
     instructor = next((i for i in data['instructors'] if i['employee_id'] == employee_id), None)
     if instructor:
         return jsonify(instructor)
     return jsonify({"error": "Instructor not found"}), 404
 
-# GET Endpoint: Fetch all classes
 @app.route('/classes', methods=['GET'])
 def get_classes():
+    data = load_data()
     return jsonify(data['classes'])
 
-# POST Endpoint: Add a new class
 @app.route('/classes', methods=['POST'])
 def add_class():
-    new_class = request.json
-    data['classes'].append(new_class)
-    with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-    return jsonify({"message": "Class added successfully!"}), 201
+    try:
+        data = load_data()
+        new_class = request.json
+        data['classes'].append(new_class)
+        save_data(data)
+        return jsonify({"message": "Class added successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# GET Endpoint: Fetch specific class by class number
 @app.route('/classes/<string:class_number>', methods=['GET'])
 def get_class(class_number):
+    data = load_data()
     class_data = next((c for c in data['classes'] if c['class_number'] == class_number), None)
     if class_data:
         return jsonify(class_data)
     return jsonify({"error": "Class not found"}), 404
 
-#  NEW: GET Endpoint - Fetch all courses
 @app.route('/courses', methods=['GET'])
 def get_courses():
+    data = load_data()
     return jsonify(data['courses'])
 
-#  NEW: POST Endpoint - Add a new course
 @app.route('/courses', methods=['POST'])
 def add_course():
-    new_course = request.json
-    data['courses'].append(new_course)
-    with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-    return jsonify({"message": "Course added successfully!"}), 201
+    try:
+        data = load_data()
+        new_course = request.json
+        data['courses'].append(new_course)
+        save_data(data)
+        return jsonify({"message": "Course added successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-#  NEW: GET Endpoint - Fetch a specific course by course code
 @app.route('/courses/<string:course_code>', methods=['GET'])
 def get_course(course_code):
+    data = load_data()
     course = next((c for c in data['courses'] if c['course_code'] == course_code), None)
     if course:
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
 
-# Run the server
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use environment variable for port (required for Heroku)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
 
