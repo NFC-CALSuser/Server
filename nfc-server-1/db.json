@@ -1,23 +1,62 @@
 {
-    "students": [{
-        "id": "sample",
-        "name": "Sample Student",
-        "email": "sample@example.com"
-    }],
-    "instructors": [{
-        "id": "sample",
-        "name": "Sample Instructor",
-        "email": "instructor@example.com"
-    }],
-    "classes": [{
-        "id": "sample",
-        "courseId": "sample",
-        "instructorId": "sample",
-        "semester": "Fall 2023"
-    }],
-    "courses": [{
-        "id": "sample",
-        "name": "Sample Course",
-        "description": "Sample course description"
-    }]
+    "courses": [
+        {
+        "id": 492,
+        "instructor_id": "20242024",
+        "attendance": []
+        },
+        {
+        "id": 493,
+        "instructor_id": "20252025",
+        "attendance": []
+        }
+    ],
+
+    
+    "instructors": [
+    {
+      "id": "20242024",
+      "email": "fmalgahtani@ksu.edu.sa",
+      "password": "111",
+      "nfc_id": "2024"
+    },
+    {
+        "id": "20252025",
+        "email": "esa@ksu.edu.sa",
+        "password": "222",
+        "nfc_id": "2025"
+      }
+    ],
+
+  
+    "students": [
+    {
+      "id": "442106884",
+      "email": "442106884@student.ksu.edu.sa",
+      "password": "123",
+      "nfc_id": "6884",
+      "attendance": []
+    },
+    {
+      "id": "442106889",
+      "email": "442106889@student.ksu.edu.sa",
+      "password": "1234",
+      "nfc_id": "6889",
+      "attendance": []
+    },
+    {
+      "id": "442100881",
+      "email": "442100881@student.ksu.edu.sa",
+      "password": "12345",
+      "nfc_id": "0881",
+      "attendance": []
+    },
+    {
+      "id": "442106882",
+      "email": "442106882@student.ksu.edu.sa",
+      "password": "123456",
+      "nfc_id": "6882",
+      "attendance": []
+    }
+    ]
 }
