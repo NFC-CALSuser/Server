@@ -12,9 +12,10 @@ def load_data():
     except FileNotFoundError:
         # Create default structure if file doesn't exist
         default_data = {
-            "courses": [],
+            "students": [],
             "instructors": [],
-            "students": []
+            "classes": [],
+            "courses": []
         }
         save_data(default_data)
         return default_data
@@ -47,7 +48,7 @@ def add_student():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/students/<string:student_id>', methods=['GET'])
+@app.route('/students/<int:student_id>', methods=['GET'])
 def get_student(student_id):
     data = load_data()
     student = next((s for s in data['students'] if s['id'] == student_id), None)
@@ -71,13 +72,37 @@ def add_instructor():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/instructors/<string:instructor_id>', methods=['GET'])
-def get_instructor(instructor_id):
+@app.route('/instructors/<int:employee_id>', methods=['GET'])
+def get_instructor(employee_id):
     data = load_data()
-    instructor = next((i for i in data['instructors'] if i['id'] == instructor_id), None)
+    instructor = next((i for i in data['instructors'] if i['employee_id'] == employee_id), None)
     if instructor:
         return jsonify(instructor)
     return jsonify({"error": "Instructor not found"}), 404
+
+@app.route('/classes', methods=['GET'])
+def get_classes():
+    data = load_data()
+    return jsonify(data['classes'])
+
+@app.route('/classes', methods=['POST'])
+def add_class():
+    try:
+        data = load_data()
+        new_class = request.json
+        data['classes'].append(new_class)
+        save_data(data)
+        return jsonify({"message": "Class added successfully!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/classes/<string:class_number>', methods=['GET'])
+def get_class(class_number):
+    data = load_data()
+    class_data = next((c for c in data['classes'] if c['class_number'] == class_number), None)
+    if class_data:
+        return jsonify(class_data)
+    return jsonify({"error": "Class not found"}), 404
 
 @app.route('/courses', methods=['GET'])
 def get_courses():
@@ -95,55 +120,13 @@ def add_course():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/courses/<int:course_id>', methods=['GET'])
-def get_course(course_id):
+@app.route('/courses/<string:course_code>', methods=['GET'])
+def get_course(course_code):
     data = load_data()
-    course = next((c for c in data['courses'] if c['id'] == course_id), None)
+    course = next((c for c in data['courses'] if c['course_code'] == course_code), None)
     if course:
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
-
-@app.route('/courses/<int:course_id>/attendance', methods=['GET'])
-def get_course_attendance(course_id):
-    data = load_data()
-    course = next((c for c in data['courses'] if c['id'] == course_id), None)
-    if not course:
-        return jsonify({"error": "Course not found"}), 404
-    
-    # Optionally filter by student_id if provided in query params
-    student_id = request.args.get('student_id')
-    if student_id:
-        attendance = [a for a in course['attendance'] if a['student_id'] == student_id]
-        return jsonify(attendance)
-    return jsonify(course['attendance'])
-
-@app.route('/courses/<int:course_id>/attendance', methods=['POST'])
-def add_attendance(course_id):
-    try:
-        data = load_data()
-        course = next((c for c in data['courses'] if c['id'] == course_id), None)
-        if not course:
-            return jsonify({"error": "Course not found"}), 404
-
-        attendance_record = request.json
-        if 'student_id' not in attendance_record:
-            return jsonify({"error": "student_id is required"}), 400
-
-        # Verify student exists
-        student = next((s for s in data['students'] if s['id'] == attendance_record['student_id']), None)
-        if not student:
-            return jsonify({"error": "Student not found"}), 404
-
-        # Add timestamp if not provided
-        if 'timestamp' not in attendance_record:
-            from datetime import datetime
-            attendance_record['timestamp'] = datetime.now().isoformat()
-
-        course['attendance'].append(attendance_record)
-        save_data(data)
-        return jsonify({"message": "Attendance recorded successfully!"}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 # New route to display db.json
 @app.route('/db.json')
