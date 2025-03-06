@@ -2,12 +2,12 @@
     "courses": [
         {
         "id": 492,
-        "instructor_id": "20242024",
+        "instructor_id": 20242024,
         "attendance": []
         },
         {
         "id": 493,
-        "instructor_id": "20252025",
+        "instructor_id": 20252025,
         "attendance": []
         }
     ],
@@ -15,13 +15,13 @@
     
     "instructors": [
     {
-      "id": "20242024",
+      "id": 20242024,
       "email": "fmalgahtani@ksu.edu.sa",
       "password": "111",
       "nfc_id": "2024"
     },
     {
-        "id": "20252025",
+        "id": 20252025,
         "email": "esa@ksu.edu.sa",
         "password": "222",
         "nfc_id": "2025"
@@ -31,25 +31,25 @@
   
     "students": [
     {
-      "id": "442106884",
+      "id": 442106884,
       "email": "442106884@student.ksu.edu.sa",
       "password": "123",
       "nfc_id": "6884"
     },
     {
-      "id": "442106889",
+      "id": 442106889,
       "email": "442106889@student.ksu.edu.sa",
       "password": "1234",
       "nfc_id": "6889"
     },
     {
-      "id": "442100881",
+      "id": 442100881,
       "email": "442100881@student.ksu.edu.sa",
       "password": "12345",
       "nfc_id": "0881"
     },
     {
-      "id": "442106882",
+      "id": 442106882,
       "email": "442106882@student.ksu.edu.sa",
       "password": "123456",
       "nfc_id": "6882"
