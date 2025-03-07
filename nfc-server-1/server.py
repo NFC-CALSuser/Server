@@ -10,10 +10,21 @@ def load_data():
         with open(db_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except FileNotFoundError:
-        # Create default structure if file doesn't exist
+        # Create default structure with test data
         default_data = {
             "students_view": {
-                "read_only": []
+                "read_only": [
+                    {
+                        "student_id": "12345",
+                        "name": "Test Student",
+                        "courses": [
+                            {
+                                "course": "CS101",
+                                "current_percentage": 85.5
+                            }
+                        ]
+                    }
+                ]
             },
             "instructors_view": {
                 "read_write": {
