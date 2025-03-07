@@ -84,6 +84,25 @@ def get_raw_db():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/student/<string:student_id>/course/<string:course>/percentage', methods=['GET'])
+def get_course_percentage(student_id, course):
+    data = load_data()
+    student = next((s for s in data['students_view']['read_only'] 
+                   if s['student_id'] == student_id), None)
+    if not student:
+        return jsonify({"error": "Student not found"}), 404
+    
+    course_info = next((c for c in student['courses'] 
+                       if c['course'] == course), None)
+    if not course_info:
+        return jsonify({"error": "Course not found for this student"}), 404
+    
+    return jsonify({
+        "student_id": student_id,
+        "course": course,
+        "current_percentage": course_info['current_percentage']
+    })
+
 if __name__ == '__main__':
     # Use environment variable for port (required for Heroku)
     port = int(os.environ.get('PORT', 5000))
