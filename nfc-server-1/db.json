@@ -1,32 +1,28 @@
 {
-  "students_view": {
-    "read_only": [
-      {
-        "student_id": "442106884",
-        "student_name": "Rayan Alzahrani",
-        "courses": [
-          {
-            "course": "CENX493",
-            "current_percentage": "3%"
-          },
-          {
-            "course": "CENX500",
-            "current_percentage": "6%"
-          }
-        ]
-      },
-      {
-        "student_id": "442100881",
-        "student_name": "Abulrahman Almalki",
-        "courses": [
-          {
-            "course": "CENX493",
-            "current_percentage": "6%"
-          }
-        ]
-      }
-    ]
-  },
+  "read_only": [
+    {
+      "student_id": "442106884",
+      "student_name": "Rayan Alzahrani",
+      "courses": [
+        {
+          "course": "CENX493",
+          "current_percentage": "3%",
+          "absence_dates": ["15-02-2025"]
+        }
+      ]
+    },
+    {
+      "student_id": "442100881",
+      "student_name": "Abulrahman Almalki",
+      "courses": [
+        {
+          "course": "CENX493",
+          "current_percentage": "6%",
+          "absence_dates": ["17-02-2025", "24-02-2025"]
+        }
+      ]
+    }
+  ],
   "instructors_view": {
     "read_write": {
       "attendance_history": [
