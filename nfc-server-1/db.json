@@ -50,5 +50,14 @@
         }
       }
     }
-  }
+  },
+  "attendance": [
+    {
+      "course_id": "",
+      "date": "",
+      "instructor_id": "",
+      "students_ids": [
+      ]
+    }
+  ]
 }
