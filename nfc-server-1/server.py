@@ -4,6 +4,7 @@ import os
 
 app = Flask(__name__)
 
+# Load data from db.json
 def load_data():
     try:
         db_path = os.path.join(os.path.dirname(__file__), 'db.json')
@@ -15,21 +16,25 @@ def load_data():
             "instructors": [],
             "classes": [],
             "courses": [],
-            "attendance": []  # Added attendance key to default structure
+            "attendance": []
         }
         save_data(default_data)
         return default_data
 
+# Save data to db.json
 def save_data(data):
     with open('db.json', 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
+# Initialize data
 data = load_data()
 
+# Default Route
 @app.route('/')
 def home():
     return "NFC-CALS Server is Running!"
 
+# ---- Students ----
 @app.route('/students', methods=['GET'])
 def get_students():
     data = load_data()
@@ -54,6 +59,7 @@ def get_student(student_id):
         return jsonify(student)
     return jsonify({"error": "Student not found"}), 404
 
+# ---- Instructors ----
 @app.route('/instructors', methods=['GET'])
 def get_instructors():
     data = load_data()
@@ -78,6 +84,7 @@ def get_instructor(employee_id):
         return jsonify(instructor)
     return jsonify({"error": "Instructor not found"}), 404
 
+# ---- Classes ----
 @app.route('/classes', methods=['GET'])
 def get_classes():
     data = load_data()
@@ -102,6 +109,7 @@ def get_class(class_number):
         return jsonify(class_data)
     return jsonify({"error": "Class not found"}), 404
 
+# ---- Courses ----
 @app.route('/courses', methods=['GET'])
 def get_courses():
     data = load_data()
@@ -126,33 +134,44 @@ def get_course(course_code):
         return jsonify(course)
     return jsonify({"error": "Course not found"}), 404
 
-# New Attendance Endpoints
+# ---- Attendance ----
+@app.route('/attendance', methods=['GET'])
+def get_attendance():
+    data = load_data()
+    return jsonify(data['attendance'])
+
 @app.route('/attendance', methods=['POST'])
 def add_attendance():
     try:
         data = load_data()
         new_attendance = request.json
-
-        if 'attendance' not in data:
-            data['attendance'] = []
-
-        for record in new_attendance.get('attendance', []):
-            if 'id' not in record:
-                record['id'] = str(len(data['attendance']) + 1)
-        
-        data['attendance'].extend(new_attendance['attendance'])
+        new_attendance['id'] = len(data['attendance']) + 1  # Auto-increment ID
+        data['attendance'].append(new_attendance)
         save_data(data)
-
         return jsonify({"message": "Attendance added successfully!"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/attendance', methods=['GET'])
-def get_attendance():
-    data = load_data()
-    return jsonify(data.get('attendance', []))
+@app.route('/attendance/<int:attendance_id>', methods=['PUT'])
+def update_attendance(attendance_id):
+    try:
+        data = load_data()
+        attendance_entry = next((a for a in data['attendance'] if a['id'] == attendance_id), None)
 
-# Display db.json
+        if not attendance_entry:
+            return jsonify({"error": "Attendance entry not found"}), 404
+
+        # Update fields from request body
+        updated_data = request.json
+        attendance_entry.update(updated_data)
+
+        save_data(data)
+        return jsonify({"message": "Attendance updated successfully!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# ---- DB Viewing Routes ----
 @app.route('/db.json')
 def get_db():
     try:
@@ -172,4 +191,3 @@ def get_raw_db():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
-

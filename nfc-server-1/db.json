@@ -14,7 +14,7 @@
     },
     {
       "student_id": "442100881",
-      "student_name": "Abulrahman Almalki",
+      "student_name": "Abdulrahman Almalki",
       "courses": [
         {
           "course": "CENX493",
@@ -39,7 +39,7 @@
               ]
             },
             "442100881": {
-              "student_name": "Abulrahman Almalki",
+              "student_name": "Abdulrahman Almalki",
               "current_percentage": "6%",
               "absence_dates": [
                 "17-02-2025",
