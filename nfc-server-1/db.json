@@ -22,6 +22,28 @@
           "absence_dates": ["17-02-2025", "24-02-2025"]
         }
       ]
+    },
+    {
+      "student_id": "442106882",
+      "student_name": "Mohammed Alarifi",
+      "courses": [
+        {
+          "course": "CENX493",
+          "current_percentage": "0%",
+          "absence_dates": []
+        }
+      ]
+    },
+    {
+      "student_id": "442106889",
+      "student_name": "Abdullah Alsawat",
+      "courses": [
+        {
+          "course": "CENX493",
+          "current_percentage": "0%",
+          "absence_dates": []
+        }
+      ]
     }
   ]
   },
@@ -44,6 +66,18 @@
               "absence_dates": [
                 "17-02-2025",
                 "24-02-2025"
+              ]
+            },
+            "442106882": {
+              "student_name": "Mohammed Alarifi",
+              "current_percentage": "0%",
+              "absence_dates": [
+              ]
+            },
+            "442106889": {
+              "student_name": "Abdullah Alsawat",
+              "current_percentage": "0%",
+              "absence_dates": [
               ]
             }
           }
